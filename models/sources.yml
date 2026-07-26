@@ -1,0 +1,12 @@
+version: 2
+
+sources:
+  - name: nyc_taxi_pipeline
+    description: SQLite platform instance loaded into local DataHub for the hackathon demo
+    tables:
+      - name: raw_trips
+        description: Raw NYC yellow taxi trips (ground truth for freshness)
+      - name: staging_trips
+        description: Cleaned trips — planted staleness vs raw in nyc_taxi_pipeline.db
+      - name: mart_daily_summary
+        description: Daily aggregates downstream of staging (also stale when staging lags)
