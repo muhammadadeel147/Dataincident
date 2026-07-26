@@ -1,15 +1,18 @@
 # Staging model: raw_trips → staging_trips
-# Demo target for stage-4 codegen PRs (freshness / empty-load guards).
+# Demo target for incident-commander codegen PRs (freshness guards).
 
 version: 2
 
 models:
   - name: staging_trips
     description: >
-      Cleaned NYC taxi trips derived from raw_trips. Expected to stay within
-      one day of the latest raw pickup date under the Freshness SLA.
+      Cleaned NYC taxi trips derived from raw_trips. Freshness SLA: max(trip_date)
+      must stay within 1 day of max(date(tpep_pickup_datetime)) on raw_trips.
+      A larger lag means the raw → staging transition is stalled.
     columns:
       - name: trip_date
         description: Pickup date extracted from tpep_pickup_datetime
+        tests:
+          - not_null
       - name: pipeline_status
         description: Always 'staged' when the row was processed
